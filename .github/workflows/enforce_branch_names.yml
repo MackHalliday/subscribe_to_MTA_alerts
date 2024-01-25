@@ -1,5 +1,5 @@
 name: 'Enforce Branch Names'
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   check-branch-name:
