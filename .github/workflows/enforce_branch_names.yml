@@ -7,7 +7,7 @@ jobs:
     steps:
     - name: Check Branch Name
       run: |
-        if [[ ! $GITHUB_REF =~ ^refs/heads/STMA-[0-9]+$ ]]; then
-          echo "Branch name does not follow the 'STMA-<issue_number>' pattern"
+        if [[ ! $GITHUB_REF =~ ^refs/heads/stma-[0-9]+$ ]]; then
+          echo "Branch name does not follow the 'stma-<issue_number>' pattern"
           exit 1
         fi
