@@ -1,14 +1,33 @@
 name: 'Branch Naming Check'
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore:
+      - main
+      - master
+  pull_request:
+    branches:
+      - '*'
 
 jobs:
   check-branch-name:
     runs-on: ubuntu-latest
     steps:
+    - name: Extract branch name
+      id: extract_branch
+      run: |
+        if [[ $GITHUB_REF =~ refs/pull/([0-9]+)/merge ]]; then
+          echo "This is a pull request merge, skipping branch name check."
+          echo "skip_check=true" >> $GITHUB_ENV
+        else
+          BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_ENV
+        fi
+
     - name: Check Branch Name
       run: |
-        if [[ ! $GITHUB_REF =~ ^refs/heads/stma-[0-9]+$ ]]; then
-          echo "Invalid branch name: ${GITHUB_REF##*/}"
+        if [[ ! $BRANCH_NAME =~ ^stma-[0-9]+$ ]]; then
+          echo "Invalid branch name: $BRANCH_NAME"
           echo "Branch name does not follow the 'stma-<issue_number>' pattern"
           exit 1
         fi
+
