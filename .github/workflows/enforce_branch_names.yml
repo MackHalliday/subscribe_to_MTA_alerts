@@ -1,5 +1,5 @@
-name: 'Enforce Branch Names'
-on: [pull_request]
+name: 'Branch Naming Check'
+on: [push, pull_request]
 
 jobs:
   check-branch-name:
@@ -7,7 +7,8 @@ jobs:
     steps:
     - name: Check Branch Name
       run: |
-        if [[ ! $GITHUB_REF =~ ^refs/heads/stma-[0-9]+$ ]]; then
-          echo "Branch name does not follow the 'stma-<issue_number>' pattern"
+        if [[ ! $GITHUB_REF =~ ^refs/heads/STMA-[0-9]+$ ]]; then
+          echo "Invalid branch name: ${GITHUB_REF##*/}"
+          echo "Branch name does not follow the 'STMA-<issue_number>' pattern"
           exit 1
         fi
